@@ -13,11 +13,11 @@ import traceback
 from textblob import TextBlob
 
 #Consumer keys and access keys
-consumer_key=' '
-consumer_secret=' '
+consumer_key='v9ldUGSWVpGNwSijNGc9KTava'
+consumer_secret='AdannwtH6L8wl5Zv57hhiP6Vg2EAtHx0yIzs0sqYGpHwWa0v88'
 
-access_token=' '
-access_secret_token=' '
+access_token='169568354-l95HyTmdpbDLsKuTYzRzNx5TOp7LAggNvpERppKk'
+access_secret_token='yxRBHy034iGZSUYO1wVqla9emNtFUoMdHuuRatR9Xr3lp'
 
 #dictionary to contain tweets where key = tweet_id and value=tweet_information
 tweet={}
@@ -80,7 +80,7 @@ class listener(StreamListener):
                 tweet_id=int(status.id)
                 if(tweet_id not in tweet.keys()):    
                     tweet_created=status.created_at.date()
-                    tweet_details= [[tweet_id,tweet_created,tweet_text,keywords[index]]]
+                    tweet_details= [[tweet_id,tweet_created,tweet_str,keywords[index]]]
                     tweet[tweet_id]= tweet_details;
                     senti = TextBlob(tweet_str);
                     senti.sentiment
