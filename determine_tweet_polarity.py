@@ -13,11 +13,11 @@ import traceback
 from textblob import TextBlob
 
 #Consumer keys and access keys
-consumer_key=' '
-consumer_secret=' '
+consumer_key='v9ldUGSWVpGNwSijNGc9KTava'
+consumer_secret='AdannwtH6L8wl5Zv57hhiP6Vg2EAtHx0yIzs0sqYGpHwWa0v88'
 
-access_token=' '
-access_secret_token=' '
+access_token='169568354-l95HyTmdpbDLsKuTYzRzNx5TOp7LAggNvpERppKk'
+access_secret_token='yxRBHy034iGZSUYO1wVqla9emNtFUoMdHuuRatR9Xr3lp'
 
 #dictionary to contain tweets where key = tweet_id and value=tweet_information
 tweet={}
@@ -51,33 +51,16 @@ def Remove_non_ascci_characters(tweet):
 
     return tweet_without_aascii;
 
-#append tweets to a file
-def WriteToFile(filename, tweet, class_):
-    file = open(filename, "a+")
-
-    file.write(tweet+','+class_+'\n')
-
-    file.close()
-
 #remove url in a tweet
-def Remove_url_from_tweet(tweet):
+def Remove_url_and_at_name_from_tweet(tweet):
     words = tweet.split(' ');
 
     tweet_without_http="";
     for x in range(0,len(words)):
-        if 'http' not in words[x]:
+        if 'http' not in words[x] and '@' not in words[x]:
             tweet_without_http += " "+words[x];
     return tweet_without_http;
 
-#remove @name addressed in a tweet
-def Remove_atName(tweet):
-    words = tweet.split(' ');
-
-    tweet_without_atName="";
-    for x in range(0,len(words)):
-        if 'http' not in words[x]:
-            tweet_without_atName += " "+words[x];
-    return tweet_without_atName;
 
 class listener(StreamListener):    
     def on_status(self,status):
@@ -85,7 +68,8 @@ class listener(StreamListener):
         tweet_text=status.text;
         tweet_text = Remove_non_ascci_characters(tweet_text).lower().replace(',',' ');
         tweet_str = str(tweet_text);
-        tweet_str = Remove_url_from_tweet(tweet_str);
+        tweet_str = Remove_url_and_at_name_from_tweet(tweet_str);
+        
         
         try:
             
@@ -96,8 +80,8 @@ class listener(StreamListener):
                 tweet_id=int(status.id)
                 if(tweet_id not in tweet.keys()):    
                     tweet_created=status.created_at.date()
-                    a= [[tweet_id,tweet_created,tweet_text,keywords[index]]]
-                    tweet[tweet_id]= a;
+                    tweet_details= [[tweet_id,tweet_created,tweet_text,keywords[index]]]
+                    tweet[tweet_id]= tweet_details;
                     senti = TextBlob(tweet_str);
                     senti.sentiment
 
@@ -110,7 +94,7 @@ class listener(StreamListener):
                                       
                     f=open('tweets_new_elections.csv', 'a+')
                     writer = csv.writer(f);
-                    writer.writerows(a);
+                    writer.writerows(tweet_details);
 
         except Exception, err:
             print "....Exception";
@@ -127,6 +111,7 @@ auth= OAuthHandler(consumer_key,consumer_secret)
 auth.set_access_token(access_token,access_secret_token)
 twitterStream= Stream(auth,listener())
 twitterStream.filter(track=keywords,languages = ['en'])
+
 
 
 
