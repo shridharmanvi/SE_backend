@@ -1,3 +1,4 @@
+from __future__ import division
 from flask import Flask, jsonify,request, render_template, redirect, url_for, session
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
@@ -54,13 +55,41 @@ def dataload():
         mongo.db.tweets.insert(x)     
 
 
-@app.route('/findout/< key_word >')
-def loggedout():
-    #data = mongo.db.tweets.find({"one":{ '$regex' : email}})
-    data = mongo.db.tweets.find({'keyword':{'$regex':'key_word'}})
+@app.route('/findout/<key_word>')
+def loggedout(key_word):
+    #data = mongo.db.tweets.find({"one":{ '$regex' : email}}
+    var= key_word.lower()
+    print var
+    data = mongo.db.tweets.find({'keyword':{'$regex':var}})
+    cnt= data.count()
+    print cnt
+    if (cnt >0):
+        j=[]
+        i={"one":1,"two":2}
+        pos=0
+        neg=0
+        neu=0
+        final=[]
+        for k in data:
+            if (k['keyword']==key_word):
+                if k['polarity']>0:
+                    pos= pos+1
+                elif k['polarity']<0:
+                    neg=neg+1
+                else:
+                    neu=neu+1
+       
+        p=(pos)/cnt
+        n=neg/cnt
+        x={'pos':p,'neg':n}
+        j.append(x)
+        ret=json.dumps(j)
+        return ret
 
-    j=[]
-    i={"one":1,"two":2}
+    else:
+        return 'Please enter a valid candidate for 2016 Presidential Elections' 
+    
+    
 
     #for x in data:
     #    replace_value_with_definition(i,'one',x['one'])

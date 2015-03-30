@@ -21,12 +21,17 @@ db=c.se # mongoDatabase
 
 
 #Consumer keys and access keys
+<<<<<<< HEAD
 
 consumer_key='v9ldUGSWVpGNwSijNGc9KTava'
 consumer_secret='AdannwtH6L8wl5Zv57hhiP6Vg2EAtHx0yIzs0sqYGpHwWa0v88'
+=======
+consumer_key=' '
+consumer_secret=' '
+>>>>>>> efd6b3dbfaea517139e544491779b9c61d1c24b8
 
-access_token='169568354-l95HyTmdpbDLsKuTYzRzNx5TOp7LAggNvpERppKk'
-access_secret_token='yxRBHy034iGZSUYO1wVqla9emNtFUoMdHuuRatR9Xr3lp'
+access_token=' '
+access_secret_token=' '
 
 #dictionary to contain tweets where key = tweet_id and value=tweet_information
 tweet={}
