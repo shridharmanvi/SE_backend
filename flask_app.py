@@ -32,18 +32,41 @@ def replace_value_with_definition(dictionary,key_to_find, definition):
             dictionary[key] = definition
 
 
-@app.route('/findout')
+#The below function cleanses and loads the data from tweets.csv and loads in into mongodb tweets collection 
+# Call only in case manual data load from csv is required
+def dataload():
+    t=open('tweets.csv','rw')
+
+    tweets={}
+
+    for row in t.readlines():
+        row= row.split(',')
+        #row[0]=int(row[0])
+        #jobs[int(row[0])]=rowi
+        tweet_id=int(row[0])
+        date=row[1]
+        tweet=row[2]
+        keyword=row[3]
+        tweet=tweet.rstrip()
+        keyword=keyword.rstrip()
+        #print tweet_id #date tweet keyword
+        x={'tweet_id':tweet_id,'date':date,'tweet':tweet,'keyword':keyword}
+        mongo.db.tweets.insert(x)     
+
+
+@app.route('/findout/< key_word >')
 def loggedout():
     #data = mongo.db.tweets.find({"one":{ '$regex' : email}})
-    data = mongo.db.tweets.find()
+    data = mongo.db.tweets.find({'keyword':{'$regex':'key_word'}})
 
     j=[]
     i={"one":1,"two":2}
-    for x in data:
-        replace_value_with_definition(i,'one',x['one'])
-        replace_value_with_definition(i,'two',x['two'])
-        j.append(i)
-        i={"one":1,"two":2}
+
+    #for x in data:
+    #    replace_value_with_definition(i,'one',x['one'])
+     #   replace_value_with_definition(i,'two',x['two'])
+      #  j.append(i)
+       # i={"one":1,"two":2}
         #print j
      
     k=json.dumps(j)

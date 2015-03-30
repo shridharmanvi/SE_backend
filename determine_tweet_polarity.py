@@ -11,13 +11,22 @@ import time
 import sys
 import traceback
 from textblob import TextBlob
+from pymongo import Connection
+import pymongo
+from pymongo import MongoClient
+
+#Connection string
+c= MongoClient()
+db=c.se # mongoDatabase
+
 
 #Consumer keys and access keys
-consumer_key=' '
-consumer_secret=' '
 
-access_token=' '
-access_secret_token=' '
+consumer_key='v9ldUGSWVpGNwSijNGc9KTava'
+consumer_secret='AdannwtH6L8wl5Zv57hhiP6Vg2EAtHx0yIzs0sqYGpHwWa0v88'
+
+access_token='169568354-l95HyTmdpbDLsKuTYzRzNx5TOp7LAggNvpERppKk'
+access_secret_token='yxRBHy034iGZSUYO1wVqla9emNtFUoMdHuuRatR9Xr3lp'
 
 #dictionary to contain tweets where key = tweet_id and value=tweet_information
 tweet={}
@@ -79,22 +88,23 @@ class listener(StreamListener):
                     
                 tweet_id=int(status.id)
                 if(tweet_id not in tweet.keys()):    
-                    tweet_created=status.created_at.date()
-                    tweet_details= [[tweet_id,tweet_created,tweet_text,keywords[index]]]
+                    tweet_created=str(status.created_at.date())
+                    tweet_details= [[tweet_id,tweet_created,tweet_str,keywords[index]]]
                     tweet[tweet_id]= tweet_details;
                     senti = TextBlob(tweet_str);
                     senti.sentiment
 
                     #-----------------------------------code to insert values into the database
 
-
-
+                    x={'tweet_id':tweet_id,'date':tweet_created,'tweet':tweet_str,'keyword':keywords[index],'polarity':senti.sentiment.polarity}
+                    print x
+                    db.tweets.insert(x)
                     #----------------------------------
-                    print tweet_str, 'keyword:',keywords[index], 'polarity:',senti.sentiment.polarity
+                    #print tweet_str, 'keyword:',keywords[index], 'polarity:',senti.sentiment.polarity
                                       
-                    f=open('tweets_new_elections.csv', 'a+')
-                    writer = csv.writer(f);
-                    writer.writerows(tweet_details);
+                    #f=open('tweets_new_elections.csv', 'a+')
+                    #writer = csv.writer(f);
+                    #writer.writerows(tweet_details);
 
         except Exception, err:
             print "....Exception";

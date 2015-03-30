@@ -8,23 +8,17 @@ from bson import json_util
 from bson.json_util import dumps
 from werkzeug import secure_filename
 from random import randint
-#from flaskext.uploads import delete, init, save, Upload
-#from flask.uploads import UploadSet, IMAGES
 import os
-
 from flask import make_response
-
 from bson.json_util import dumps
-
-
-app=Flask(__name__)
 
 app.secret_key = 'dfgsdfgsfgdfsg'
 app.config['MONGO_HOST'] = '0.0.0.0'
 app.config['MONGO_PORT'] = 27017
 app.config['MONGO_DBNAME'] = 'se'
-#app.config['MONGO_USERNAME'] = ''
-#app.config['MONGO_PASSWORD'] = ''
+app.config['MONGO_USERNAME'] = ''
+app.config['MONGO_PASSWORD'] = ''
+
 mongo = PyMongo(app)
 
 
@@ -38,18 +32,25 @@ def replace_value_with_definition(dictionary,key_to_find, definition):
 
 
 def dataload():
-    job=open('tweets.csv','rw')
+    t=open('tweets.csv','rw')
 
-    jobs={}
+    tweets={}
 
-    for row in job.readlines():
+    for row in t.readlines():
         row= row.split(',')
-        try:
-            row[0]=int(row[0])
-            jobs[int(row[0])]=row
-        except ValueError:
-            x=1
+        #row[0]=int(row[0])
+        #jobs[int(row[0])]=rowi
+        tweet_id=row[0]
+        date=row[1]
+        tweet=row[2]
+        keyword=row[3]
+        x={'tweet_id':tweet_id,'date':date,'tweet':tweet,'keyword':keyword}
+        print x
+        break
+           
 
+
+dataload()
 #print len(jobs.keys())i    
 
 
