@@ -20,18 +20,24 @@ c= MongoClient()
 db=c.se # mongoDatabase
 
 
+
+consumer_key='WbREEJKoXbv8DrlWMzRwHCPtm'
+consumer_secret='WZeUQfjMDESe5Mp60WagJv61veSvgpOCk85yF4wmMZo4CnH3HM'
+
+access_token='3000677634-7Os7M2jtgJCCChqiRAd57gLgjqKw1GqKHxNDUJS'
+access_secret_token='dozZjqK9SSRJ4QvCURdtNXvp6mnjHv7pFV3qK55ejPb1N'
+
+
 #Consumer keys and access keys
-<<<<<<< HEAD
+#consumer_key='v9ldUGSWVpGNwSijNGc9KTava'
+#consumer_secret='AdannwtH6L8wl5Zv57hhiP6Vg2EAtHx0yIzs0sqYGpHwWa0v88'
+#=======
+#consumer_key=' '
+#consumer_secret=' '
+#>>>>>>> efd6b3dbfaea517139e544491779b9c61d1c24b8
 
-consumer_key='v9ldUGSWVpGNwSijNGc9KTava'
-consumer_secret='AdannwtH6L8wl5Zv57hhiP6Vg2EAtHx0yIzs0sqYGpHwWa0v88'
-=======
-consumer_key=' '
-consumer_secret=' '
->>>>>>> efd6b3dbfaea517139e544491779b9c61d1c24b8
-
-access_token=' '
-access_secret_token=' '
+#access_token=' '
+#access_secret_token=' '
 
 #dictionary to contain tweets where key = tweet_id and value=tweet_information
 tweet={}

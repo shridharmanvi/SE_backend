@@ -10,6 +10,9 @@ from random import randint
 #from flaskext.uploads import delete, init, save, Upload
 #from flask.uploads import UploadSet, IMAGES
 import os
+from pytagcloud import create_tag_image, make_tags
+from pytagcloud.lang.counter import get_tag_counts
+
 
 from flask import make_response
 
@@ -59,10 +62,10 @@ def dataload():
 def loggedout(key_word):
     #data = mongo.db.tweets.find({"one":{ '$regex' : email}}
     var= key_word.lower()
-    print var
+    #print var
     data = mongo.db.tweets.find({'keyword':{'$regex':var}})
     cnt= data.count()
-    print cnt
+    #print cnt
     if (cnt >0):
         j=[]
         i={"one":1,"two":2}
@@ -79,10 +82,23 @@ def loggedout(key_word):
                 else:
                     neu=neu+1
        
-        p=(pos)/cnt
-        n=neg/cnt
+        p=100*((pos)/cnt)
+        n=100*(neg/cnt)
         x={'pos':p,'neg':n}
         j.append(x)
+
+        o= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-28"}} ,{'polarity':{"$gt":0}}] })
+        q= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-28"}}] })
+        r= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-29"}} ,{'polarity':{"$gt":0}}] })
+        s= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-29"}}] })
+        t= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-30"}} ,{'polarity':{"$gt":0}}] })
+        u= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-30"}}] })
+        one={'1':(100*((o.count())/(q.count()))),'2':(100*((r.count())/(s.count()))),'3':(100*((t.count())/(u.count())))}
+        #two={'2':(100*((r.count())/(s.count())))}
+        #three={'3':(100*((t.count())/(u.count())))}
+        j.append(one)
+        #j.append(two)
+        #j.append(three)
         ret=json.dumps(j)
         return ret
 
