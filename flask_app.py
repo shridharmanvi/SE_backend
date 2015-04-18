@@ -10,8 +10,8 @@ from random import randint
 #from flaskext.uploads import delete, init, save, Upload
 #from flask.uploads import UploadSet, IMAGES
 import os
-from pytagcloud import create_tag_image, make_tags
-from pytagcloud.lang.counter import get_tag_counts
+#from pytagcloud import create_tag_image, make_tags,LAYOUT_MOST_HORIZONTAL
+#from pytagcloud.lang.counter import get_tag_counts
 
 
 from flask import make_response
@@ -57,6 +57,10 @@ def dataload():
         x={'tweet_id':tweet_id,'date':date,'tweet':tweet,'keyword':keyword}
         mongo.db.tweets.insert(x)     
 
+@app.route('/')
+def route():
+    return 'Hey'
+
 
 @app.route('/findout/<key_word>')
 def loggedout(key_word):
@@ -65,7 +69,7 @@ def loggedout(key_word):
     #print var
     data = mongo.db.tweets.find({'keyword':{'$regex':var}})
     cnt= data.count()
-    #print cnt
+    d.wordcloud_build(var)
     if (cnt >0):
         j=[]
         i={"one":1,"two":2}
@@ -73,6 +77,7 @@ def loggedout(key_word):
         neg=0
         neu=0
         final=[]
+        word_cloud=[]
         for k in data:
             if (k['keyword']==key_word):
                 if k['polarity']>0:
@@ -81,6 +86,8 @@ def loggedout(key_word):
                     neg=neg+1
                 else:
                     neu=neu+1
+                word_cloud.append(k['tweet'])
+
        
         p=100*((pos)/cnt)
         n=100*(neg/cnt)
@@ -93,10 +100,19 @@ def loggedout(key_word):
         s= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-29"}}] })
         t= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-30"}} ,{'polarity':{"$gt":0}}] })
         u= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-30"}}] })
+        
+       # max_tags = 100
+       # tags = make_tags(get_tag_counts(word_cloud)[:max_tags], minsize=1,  maxsize=60)
+       # size = (1024, 500)
+       # imag='word_cloud.png'        
+       # create_tag_image(tags, imag, size=(1000, 1000), background=(0,0,0,255) ,fontname='Lobster', rectangular= True, layout= LAYOUT_MOST_HORIZONTAL)
         one={'1':(100*((o.count())/(q.count()))),'2':(100*((r.count())/(s.count()))),'3':(100*((t.count())/(u.count())))}
         #two={'2':(100*((r.count())/(s.count())))}
         #three={'3':(100*((t.count())/(u.count())))}
         j.append(one)
+        image_link='/home/ubuntu/se/word_cloud.png'
+       # image={'img_link':image_link}
+       # j.append(image)
         #j.append(two)
         #j.append(three)
         ret=json.dumps(j)
