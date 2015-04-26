@@ -69,7 +69,7 @@ def loggedout(key_word):
     #print var
     data = mongo.db.tweets.find({'keyword':{'$regex':var}})
     cnt= data.count()
-    d.wordcloud_build(var)
+    #d.wordcloud_build(var)
     if (cnt >0):
         j=[]
         i={"one":1,"two":2}
@@ -100,21 +100,51 @@ def loggedout(key_word):
         s= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-29"}}] })
         t= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-30"}} ,{'polarity':{"$gt":0}}] })
         u= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-03-30"}}] })
+        v= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-04-20"}} ,{'polarity':{"$gt":0}}] })
+        w= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-04-20"}}] })
+        an= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-04-19"}} ,{'polarity':{"$gt":0}}] })
+        bn= mongo.db.tweets.find({ "$and": [ {'keyword':{'$regex':var}}, {'date':{"$regex":"2015-04-19"}}] })
+
         
-       # max_tags = 100
-       # tags = make_tags(get_tag_counts(word_cloud)[:max_tags], minsize=1,  maxsize=60)
-       # size = (1024, 500)
-       # imag='word_cloud.png'        
-       # create_tag_image(tags, imag, size=(1000, 1000), background=(0,0,0,255) ,fontname='Lobster', rectangular= True, layout= LAYOUT_MOST_HORIZONTAL)
-        one={'1':(100*((o.count())/(q.count()))),'2':(100*((r.count())/(s.count()))),'3':(100*((t.count())/(u.count())))}
-        #two={'2':(100*((r.count())/(s.count())))}
+        try:
+            res1= (100*((o.count())/(q.count())))
+        except ZeroDivisionError:
+            res1=30
+        
+        try:
+            res2= (100*((r.count())/(s.count())))
+        except ZeroDivisionError:
+            res2=res1
+
+        try:
+            res3= (100*((t.count())/(u.count())))
+        except ZeroDivisionError:
+            res3=res2
+        
+        try:
+            res4= (100*((v.count())/(w.count())))
+        except ZeroDivisionError:
+            res4=res3
+
+        try:
+            res5= (100*((an.count())/(bn.count())))
+        except ZeroDivisionError:
+            res5=res4 
+
+
+        #one={'1':(100*((o.count())/(q.count()))),'2':(100*((r.count())/(s.count()))),'3':(100*((t.count())/(u.count()))),'4':(100*((v.count())/(w.count()))),'5':(100*((an.count())/(bn.count())))}
+        
+        one= {'1':res1,'2':res2,'3':res3,'4':res4,'5':res5} 
+        
+#two={'2':(100*((r.count())/(s.count())))}
         #three={'3':(100*((t.count())/(u.count())))}
         j.append(one)
-        image_link='/home/ubuntu/se/word_cloud.png'
-       # image={'img_link':image_link}
-       # j.append(image)
-        #j.append(two)
-        #j.append(three)
+        #image_link='/home/ubuntu/se/word_cloud.png'
+        im='https://s3.amazonaws.com/manvi123/'
+        im_name= var.replace(" ", "")
+        image_link=im + im_name + '.png'
+        image={'img_link':image_link}
+        j.append(image)
         ret=json.dumps(j)
         return ret
 
