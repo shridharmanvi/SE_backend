@@ -149,6 +149,6 @@ def ClassifyTweets(filename):
         if response=='2':
             WriteToFile('neg.csv',rows[x],'a');
 
-ClassifyTweets('tweets.csv');   
+ClassifyTweets('tweets_1.csv');   
             
     
