@@ -154,7 +154,7 @@ def WriteDictionaryToFile(filename, dictionary):
     pickle.dump(dictionary, f)
     f.close()
 
-tweet_details = ReadFile('Training_data.csv');
+tweet_details = ReadFile('example_training_data.csv');
 print tweet_details[0];
 
 print 'file_read';
