@@ -21,6 +21,10 @@ from pymongo import Connection
 import pymongo
 from pymongo import MongoClient
 
+#the source to the trained data is:
+#https://s3.amazonaws.com/manvi123/pos.pkl
+#https://s3.amazonaws.com/manvi123/neg.pkl
+
 c= MongoClient()
 db=c.se # mongoDatabase
 
